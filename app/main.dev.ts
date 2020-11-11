@@ -14,6 +14,7 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+// import { execFile } from 'child_process';
 import MenuBuilder from './menu';
 
 export default class AppUpdater {
@@ -25,6 +26,9 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+
+// const executablePath = 'resources/app.exe';
+// const backend = execFile(executablePath);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -115,7 +119,6 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
-
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
