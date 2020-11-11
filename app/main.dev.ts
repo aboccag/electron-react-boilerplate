@@ -71,21 +71,26 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  const webPreferences =
+    (process.env.NODE_ENV === 'development' ||
+      process.env.E2E_BUILD === 'true') &&
+    process.env.ERB_SECURE !== 'true'
+      ? {
+          nodeIntegration: true,
+        }
+      : {
+          preload: path.join(__dirname, 'dist/renderer.prod.js'),
+        };
+
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
-    webPreferences:
-      (process.env.NODE_ENV === 'development' ||
-        process.env.E2E_BUILD === 'true') &&
-      process.env.ERB_SECURE !== 'true'
-        ? {
-            nodeIntegration: true,
-          }
-        : {
-            preload: path.join(__dirname, 'dist/renderer.prod.js'),
-          },
+    webPreferences: {
+      ...webPreferences,
+      enableRemoteModule: true,
+    },
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
